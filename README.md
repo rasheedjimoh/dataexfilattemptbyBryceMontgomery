@@ -3,6 +3,9 @@
 ## **Summary**
 An internal investigation revealed that sensitive corporate files were accessed, compressed, and potentially exfiltrated. The goal was to trace the movement of these files and identify the individual responsible.
 
+
+![2025-02-09_23-44_1](https://github.com/user-attachments/assets/bebf0744-56e3-4aa3-b150-6e59dc5c425f)
+
 ---
 
 ## **Step 1: Identifying the Initial File Access**
@@ -22,6 +25,9 @@ DeviceFileEvents
 
 ✅ **SHA256 Found:**  
 `ec727a15bf51e027b9a1bbf097cfa9d57e46aa159bfa37f68dca5e3c5df5af3d`
+
+![2025-02-09_23-37](https://github.com/user-attachments/assets/5c6db7fc-a75f-4c42-82af-101468ca19de)
+
 
 ---
 
@@ -53,6 +59,12 @@ DeviceLogonEvents
 👤 **Other Accounts Found:**  
 `dwm-1, dwm-2, dwm-3, test, umfd-0, umfd-1, umfd-2, umfd-3`
 
+
+![2025-02-09_23-39](https://github.com/user-attachments/assets/b3070088-14ce-4c2e-9a21-3d037365be73)
+
+
+
+
 We then checked if these accounts were used on any other devices.
 
 ```kql
@@ -65,6 +77,9 @@ DeviceLogonEvents
 ```
 
 🚫 **Result:** No relevant findings.
+
+![2025-02-09_23-40](https://github.com/user-attachments/assets/cc130c66-28a8-4f96-843a-f214334a339f)
+
 
 ---
 
@@ -81,6 +96,10 @@ DeviceFileEvents
 
 ✅ **File Found On:** `lobby-fl2-ae5fc`
 
+
+![2025-02-09_23-42](https://github.com/user-attachments/assets/0b0025fd-97b4-4cd7-839d-1a676ae1d46d)
+
+
 ---
 
 ## **Step 5: Discovering Additional Files**
@@ -95,6 +114,10 @@ DeviceFileEvents
 - `Amazon-Order-123456789-Invoice.pdf`  
 - `temp___2bbf98cf.pdf`  
 
+![2025-02-09_23-42_1](https://github.com/user-attachments/assets/64378df6-4370-4189-a352-e62a5c07cbce)
+
+
+
 ## **Step 6: Discovering Potential Exfiltration Tool**
 
 Using the query below, we identified the tool used for potential exfiltration.
@@ -107,6 +130,9 @@ DeviceEvents
 ```
 
 ✅ **Tool Identified:** `steghide.exe`
+
+![2025-02-09_23-43](https://github.com/user-attachments/assets/bc81a8d5-03e4-449c-b93c-a0f99dd142fb)
+
 
 ---
 
@@ -123,7 +149,13 @@ DeviceProcessEvents
 - `c:\programdata\bryce-fishing.bmp`  
 - `c:\programdata\bryce-and-kid.bmp`  
 
-✅ **Two out of three files confirmed working.**
+✅ **Two out of three distinct files confirmed working.**
+
+![2025-02-09_23-44](https://github.com/user-attachments/assets/9003d350-daa7-467f-9afe-8bcd3870ac49)
+
+
+
+
 
 ---
 
@@ -143,6 +175,9 @@ DeviceProcessEvents
 
 The zip file `secure_files.zip` was found to contain the stego images.
 
+![2025-02-09_23-45](https://github.com/user-attachments/assets/e9fd8443-944b-48e5-9c66-31af78fb53af)
+
+
 ---
 
 ## **Step 9: Tracking File Renaming**
@@ -153,6 +188,9 @@ DeviceFileEvents
 ```
 
 ✅ **Renamed to:** `F:\marketing_misc.zip`
+
+![2025-02-09_23-45_1](https://github.com/user-attachments/assets/5462067b-c924-40a5-985a-9c7ea6b26c75)
+
 
 ---
 
