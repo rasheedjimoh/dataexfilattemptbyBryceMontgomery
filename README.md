@@ -1,7 +1,10 @@
 # **Incident Investigation: Data Exfiltration Attempt by Bryce Montgomery**
 
+![image](https://github.com/user-attachments/assets/7f745959-5e53-4fc0-853e-55b60d0eca6c)
+
 ## **Summary**
 An internal investigation revealed that sensitive corporate files were accessed, compressed, and potentially exfiltrated. The goal was to trace the movement of these files and identify the individual responsible.
+
 
 
 ![2025-02-09_23-44_1](https://github.com/user-attachments/assets/bebf0744-56e3-4aa3-b150-6e59dc5c425f)
