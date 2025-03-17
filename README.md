@@ -10,9 +10,9 @@ This investigation focuses on a suspected data exfiltration attempt by Bryce Mon
 ---
 
 ## **Step 1: Identifying the Initial File Access**
-We began the investigation by identifying the file accessed by Bryce Montgomery. To ensure we track the file accurately, we started by searching for the SHA256 hash of the file. The SHA256 hash is a unique identifier for the file and helps us track its movement across systems, regardless of the file's name or location.
+I began the investigation by identifying the file accessed by Bryce Montgomery. To ensure I track the file accurately, I started by searching for the SHA256 hash of the file. The SHA256 hash is a unique identifier for the file and helps us track its movement across systems, regardless of the file's name or location.
 
-We searched the device logs for any events related to this specific file, including file renaming, creation, or modification, within the past 7 days.
+I searched the device logs for any events related to this specific file, including file renaming, creation, or modification, within the past 7 days.
 
 ```kql
 DeviceFileEvents
@@ -36,7 +36,7 @@ This confirmed that the file in question was accessed and potentially manipulate
 ---
 
 ## **Step 2: Checking if the File Was Accessed by Other Devices**
-After confirming that Bryce accessed the file on his workstation, we expanded the search to check if the file had been accessed on any other devices within the network. By querying for the same file, we could verify if the file was copied, transferred, or otherwise accessed from another machine.
+After confirming that Bryce accessed the file on his workstation, I expanded the search to check if the file had been accessed on any other devices within the network. By querying for the same file, I could verify if the file was copied, transferred, or otherwise accessed from another machine.
 
 ```kql
 DeviceFileEvents
@@ -52,7 +52,7 @@ DeviceFileEvents
 ---
 
 ## **Step 3: Identifying Other Users on Bryce’s Workstation**
-To determine if other users had access to the workstation, we identified all account names associated with Bryce's device during the past 7 days. This would help us understand if there were any potential lapses in security or if someone else might have accessed the sensitive data.
+To determine if other users had access to the workstation, I identified all account names associated with Bryce's device during the past 7 days. This would help us understand if there were any potential lapses in security or if someone else might have accessed the sensitive data.
 
 ```kql
 DeviceLogonEvents
@@ -65,7 +65,7 @@ DeviceLogonEvents
 👤 **Other Accounts Found:**  
 `dwm-1, dwm-2, dwm-3, test, umfd-0, umfd-1, umfd-2, umfd-3`
 
-This search showed that multiple accounts, besides Bryce's, had logged into the system. We then checked if any of these other accounts had accessed the file or made modifications.
+This search showed that multiple accounts, besides Bryce's, had logged into the system. I then checked if any of these other accounts had accessed the file or made modifications.
 
 ```kql
 DeviceLogonEvents
@@ -83,7 +83,7 @@ DeviceLogonEvents
 ---
 
 ## **Step 4: Locating the File on Another Device Using the SHA256 Thumbprint**
-Since the file was not accessed on any other device by name, we decided to search for the file using its unique SHA256 hash across the network. This would help us determine if the file was moved to another location or accessed from an external machine.
+Since the file was not accessed on any other device by name, I decided to search for the file using its unique SHA256 hash across the network. This would help us determine if the file was moved to another location or accessed from an external machine.
 
 ```kql
 DeviceFileEvents
@@ -96,14 +96,14 @@ DeviceFileEvents
 
 ✅ **File Found On:** `lobby-fl2-ae5fc`
 
-We found that the file had been transferred or accessed on a different device named `lobby-fl2-ae5fc`, suggesting that the file might have been moved or copied.
+I found that the file had been transferred or accessed on a different device named `lobby-fl2-ae5fc`, suggesting that the file might have been moved or copied.
 
 ![2025-02-09_23-42](https://github.com/user-attachments/assets/0b0025fd-97b4-4cd7-839d-1a676ae1d46d)
 
 ---
 
 ## **Step 5: Discovering Additional Files**
-We expanded the investigation by searching for any other files that may have been accessed or manipulated in conjunction with the primary file. Our hypothesis was that the exfiltration attempt might have involved multiple files that could be related or similarly compromised.
+I expanded the investigation by searching for any other files that may have been accessed or manipulated in conjunction with the primary file. Our hypothesis was that the exfiltration attempt might have involved multiple files that could be related or similarly compromised.
 
 ```kql
 DeviceFileEvents
@@ -122,9 +122,9 @@ This revealed a collection of files that were potentially targeted for exfiltrat
 ---
 
 ## **Step 6: Discovering the Exfiltration Tool**
-Next, we investigated the possibility that Bryce used a tool to hide or compress the files before attempting to exfiltrate them. Our analysis indicated the presence of `steghide.exe`, a tool often used for hiding data within other files (e.g., images or audio files).
+Next, I investigated the possibility that Bryce used a tool to hide or compress the files before attempting to exfiltrate them. Our analysis indicated the presence of `steghide.exe`, a tool often used for hiding data within other files (e.g., images or audio files).
 
-We reviewed the device logs for any signs of `steghide.exe` being executed in relation to the sensitive files.
+I reviewed the device logs for any signs of `steghide.exe` being executed in relation to the sensitive files.
 
 ```kql
 DeviceEvents
@@ -142,7 +142,7 @@ This confirmed that Bryce used steganography, a technique that hides data within
 ---
 
 ## **Step 7: Finding the Stego File Paths**
-Once we confirmed the use of `steghide.exe`, we then tracked the location of the hidden files. The tool had likely embedded sensitive files within images, and we located these files using the tool’s command line references.
+Once I confirmed the use of `steghide.exe`, I then tracked the location of the hidden files. The tool had likely embedded sensitive files within images, and I located these files using the tool’s command line references.
 
 ```kql
 DeviceProcessEvents
@@ -164,7 +164,7 @@ These files were likely intended for transmission outside the company.
 ---
 
 ## **Step 8: Identifying the Compression of Files**
-Bryce’s next step was to compress the files using `7z.exe` before transmitting them. We traced the command lines to identify the specific file paths that were compressed.
+Bryce’s next step was to compress the files using `7z.exe` before transmitting them. I traced the command lines to identify the specific file paths that were compressed.
 
 ```kql
 DeviceProcessEvents
@@ -185,7 +185,7 @@ This confirmed that the compressed file, `secure_files.zip`, contained hidden fi
 ---
 
 ## **Step 9: Tracking the Renaming of the Compressed File**
-Next, we observed that the compressed file was renamed, possibly to disguise its contents or evade detection.
+Next, I observed that the compressed file was renamed, possibly to disguise its contents or evade detection.
 
 ```kql
 DeviceFileEvents
@@ -201,7 +201,7 @@ This renaming was an attempt to make the file appear less suspicious.
 ---
 
 ## **Step 10: Identifying the Time of File Rename**
-Finally, we tracked the exact time when the file was renamed, as this information would help establish the timeline of the exfiltration attempt.
+Finally, I tracked the exact time when the file was renamed, as this information would help establish the timeline of the exfiltration attempt.
 
 ```kql
 DeviceFileEvents
@@ -231,7 +231,7 @@ https://cyberrangeautomation1.azurewebsites.net/api/hunt?timestamp=2025-02-05T08
 ### **Key Takeaways**
 - **Advanced evasion techniques:** The exfiltration used steganography and file compression to avoid detection.
 - **File tracking is essential:** Hashes and file names are critical in tracing file movements and identifying suspicious activities.
-- **Process tracking is vital:** By monitoring and analyzing process executions, we can identify tools like `steghide.exe` that are used to conceal illicit activity.
+- **Process tracking is vital:** By monitoring and analyzing process executions, I can identify tools like `steghide.exe` that are used to conceal illicit activity.
 
 🔍 **Case Closed: Bryce Montgomery attempted to steal corporate data using sophisticated techniques.** 🚨
 
